@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halima & Mazeen — Nikah & Walima Invitation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Amiri, Pinyon Script, Cormorant Garamond, Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0b0b0b;
+            color: #141414;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .font-editorial {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .font-calligraphy {
+            font-family: 'Pinyon Script', cursive;
+        }
+
+        .font-arabic {
+            font-family: 'Amiri', serif;
+        }
+
+        /* =========================================================
+           1. FULL-BLEED BLACK-TIE ENVELOPE INTRO SCREEN
+           ========================================================= */
+        #envelope-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: #0d0d0d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: opacity 0.95s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.95s ease;
+        }
+
+        #envelope-overlay.revealed {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Matte Black Paper Grain */
+        .matte-black-paper {
+            background-color: #141414;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0),
+                              radial-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 0);
+            background-size: 18px 18px;
+            background-position: 0 0, 9px 9px;
+        }
+
+        /* Full-Screen Envelope Geometric Panels */
+        .env-panel-left {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #181818 0%, #101010 100%);
+            clip-path: polygon(0 0, 50% 52%, 0 100%);
+            z-index: 2;
+        }
+
+        .env-panel-right {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(225deg, #171717 0%, #0f0f0f 100%);
+            clip-path: polygon(100% 0, 50% 52%, 100% 100%);
+            z-index: 2;
+        }
+
+        .env-panel-bottom {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, #111111 0%, #191919 100%);
+            clip-path: polygon(0 100%, 50% 48%, 100% 100%);
+            z-index: 3;
+            box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .env-panel-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 55%;
+            background: linear-gradient(180deg, #1f1f1f 0%, #141414 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top center;
+            transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 4;
+            filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.85));
+        }
+
+        #envelope-overlay.opening .env-panel-top {
+            transform: rotateX(180deg);
+        }
+
+        /* Crisp Envelope Crease Lines */
+        .env-creases {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Realistic Gold Wax Seal */
+        .gold-wax-seal {
+            position: relative;
+            z-index: 10;
+            width: 104px;
+            height: 104px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 32% 28%, #f5d882 0%, #cfa142 42%, #9a701e 82%, #704e0f 100%);
+            box-shadow:
+                0 14px 32px rgba(0, 0, 0, 0.85),
+                0 0 0 5px rgba(182, 138, 48, 0.28),
+                inset 0 3px 6px rgba(255, 245, 200, 0.7),
+                inset 0 -5px 10px rgba(65, 42, 4, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+        }
+
+        .gold-wax-seal::before {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(92, 60, 10, 0.45);
+            box-shadow: inset 0 1px 2px rgba(255, 240, 185, 0.4);
+        }
+
+        #envelope-overlay:hover .gold-wax-seal {
+            transform: scale(1.06);
+        }
+
+        #envelope-overlay.opening .gold-wax-seal {
+            transform: scale(0.75);
+            opacity: 0;
+        }
+
+        /* =========================================================
+           2. EDITORIAL WEBSITE SECTIONS & VINTAGE LACE FRAME
+           ========================================================= */
+        .grayscale-editorial {
+            filter: grayscale(100%) contrast(1.06);
+        }
+
+        /* Scalloped Vintage Lace Frame (Hero Centerpiece) */
+        .lace-frame {
+            position: relative;
+            background: rgba(252, 252, 252, 0.94);
+            backdrop-filter: blur(6px);
+            padding: 2.25rem 2rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .lace-frame::before {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border: 6px dotted rgba(255, 255, 255, 0.88);
+            pointer-events: none;
+        }
+
+        .lace-frame::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 1px solid rgba(20, 20, 20, 0.18);
+            pointer-events: none;
+        }
+
+        /* Polaroid Photo Cards */
+        .polaroid-card {
+            background: #ffffff;
+            padding: 10px 10px 28px 10px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+            transition: transform 0.4s ease;
+        }
+
+        .polaroid-card:hover {
+            transform: translateY(-6px) rotate(0deg) !important;
+        }
+
+        /* Subtle Reveal on Scroll */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================================
+         FULL-SCREEN BLACK-TIE ENVELOPE OVERLAY
+         ========================================================= -->
+    <div id="envelope-overlay" class="matte-black-paper" onclick="revealWebsite()">
+        <!-- Geometric Folded Flaps -->
+        <div class="env-panel-left"></div>
+        <div class="env-panel-right"></div>
+        <div class="env-panel-bottom"></div>
+        <div class="env-panel-top"></div>
+
+        <!-- Subtle Fold Seams -->
+        <svg class="env-creases" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polyline points="0,0 50,55 100,0" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.25" />
+            <polyline points="0,100 50,48 100,100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.25" />
+        </svg>
+
+        <!-- Center Content: Bismillah, Couple Names, Gold Wax Seal & Tap Prompt -->
+        <div class="relative z-20 flex flex-col items-center text-center px-6 select-none">
+            <p class="font-arabic text-xl sm:text-2xl text-white/70 mb-2 tracking-wide" dir="rtl">
+                بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم
+            </p>
+            <p class="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-neutral-300/80 mb-3">
+                With Blessings &amp; Love, From
+            </p>
+            <h1 class="font-calligraphy text-5xl sm:text-7xl text-white leading-none drop-shadow-lg">
+                Halima &amp;
+            </h1>
+            <h1 class="font-calligraphy text-5xl sm:text-7xl text-white leading-none mb-7 drop-shadow-lg">
+                Mazeen
+            </h1>
+
+            <!-- Gold Embossed Wax Seal -->
+            <button type="button" aria-label="Tap to reveal invitation" class="gold-wax-seal">
+                <div class="flex flex-col items-center text-amber-950/85">
+                    <i class="fa-solid fa-leaf text-xs opacity-70 mb-0.5"></i>
+                    <span class="font-editorial font-bold text-xl tracking-tight">H &amp; M</span>
+                </div>
+            </button>
+
+            <p class="font-calligraphy text-2xl sm:text-3xl text-neutral-200/90 mt-7 tracking-wide animate-pulse">
+                Tap to reveal
+            </p>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         MAIN EDITORIAL BLACK-TIE WEDDING WEBSITE
+         ========================================================= -->
+    <div id="main-website" class="min-h-screen bg-white text-neutral-900">
+
+        <!-- Floating Minimal Top Bar -->
+        <nav class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 sm:px-8 pointer-events-none">
+            <button onclick="resealEnvelope()" class="pointer-events-auto bg-black/75 hover:bg-black text-white text-[10px] uppercase tracking-[0.25em] px-4 py-2 rounded-full backdrop-blur-md border border-white/15 transition">
+                <i class="fa-regular fa-envelope mr-1.5"></i>Envelope
+            </button>
+            <button onclick="shareInvite()" class="pointer-events-auto bg-black/75 hover:bg-black text-white text-[10px] uppercase tracking-[0.25em] px-4 py-2 rounded-full backdrop-blur-md border border-white/15 transition">
+                <i class="fa-solid fa-share-nodes mr-1.5"></i>Share
+            </button>
+        </nav>
+
+        <!-- =====================================================
+             SECTION 1: FULL-BLEED B&W HERO WITH LACE FRAME
+             ===================================================== -->
+        <section class="relative min-h-[92vh] w-full flex flex-col items-center justify-center overflow-hidden bg-neutral-900">
+            <!-- Monochrome Editorial Couple Background -->
+            <img
+                src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85"
+                onerror="this.src='https://placehold.co/1600x1000/1a1a1a/ffffff?text=Halima+%26+Mazeen'"
+                alt="Halima and Mazeen Wedding"
+                class="absolute inset-0 w-full h-full object-cover grayscale-editorial opacity-75 scale-105"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/65"></div>
+
+            <!-- Centered Vintage Lace Frame -->
+            <div class="relative z-10 max-w-xs sm:max-w-sm w-[86%] text-center lace-frame my-12">
+                <p class="font-arabic text-xl text-neutral-700 mb-1" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
+                <p class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-medium mb-3">
+                    We Are Getting Married
+                </p>
+                <h1 class="font-calligraphy text-5xl sm:text-6xl text-neutral-900 leading-none">
+                    Halima
+                </h1>
+                <p class="font-calligraphy text-3xl text-neutral-700 my-0.5">&amp;</p>
+                <h1 class="font-calligraphy text-5xl sm:text-6xl text-neutral-900 leading-none mb-5">
+                    Mazeen
+                </h1>
+
+                <a href="#schedule" class="inline-block bg-neutral-900 hover:bg-neutral-800 text-white text-[10px] uppercase tracking-[0.28em] px-6 py-2.5 transition">
+                    View Schedule
+                </a>
+            </div>
+
+            <!-- Bottom Hero Caption -->
+            <div class="relative z-10 text-center px-4 pb-8 max-w-md mx-auto">
+                <p class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-white/95 leading-relaxed drop-shadow">
+                    Join us as we celebrate our love and begin our forever together.
+                </p>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             SECTION 2: FEATURED DATES & ARCHITECTURAL LINE ART
+             ===================================================== -->
+        <section class="py-16 sm:py-24 px-5 bg-[#f7f6f4] text-center border-b border-neutral-200">
+            <div class="max-w-2xl mx-auto reveal-up">
+                <h2 class="font-calligraphy text-5xl sm:text-6xl text-neutral-900 mb-2">Save The Dates</h2>
+                <p class="text-[11px] sm:text-xs uppercase tracking-[0.28em] font-semibold text-neutral-700">
+                    November 27 &amp; 28, 2026
+                </p>
+                <p class="font-editorial italic text-base sm:text-lg text-neutral-600 mt-1">
+                    17 &amp; 18 Jumadil Akhir 1448 (Hijri) • Mumbra, Thane
+                </p>
+
+                <!-- Fine-Line Architectural Arch Illustration (SVG) -->
+                <div class="my-9 mx-auto w-56 sm:w-64 p-4 border border-neutral-300 bg-white shadow-sm">
+                    <svg viewBox="0 0 220 260" class="w-full h-auto text-neutral-800" fill="none" stroke="currentColor" stroke-width="1.2">
+                        <!-- Outer Mughal/Gothic Arch Frame -->
+                        <path d="M20 245 V115 C20 55 110 20 110 20 C110 20 200 55 200 115 V245 Z" />
+                        <path d="M32 245 V118 C32 66 110 34 110 34 C110 34 188 66 188 118 V245" stroke-width="0.8" />
+                        <!-- Central Spire & Crescent Finial -->
+                        <line x1="110" y1="6" x2="110" y2="20" />
+                        <circle cx="110" cy="11" r="3" />
+                        <!-- Inner Pillars & Arches -->
+                        <line x1="65" y1="95" x2="65" y2="245" stroke-width="0.9" />
+                        <line x1="155" y1="95" x2="155" y2="245" stroke-width="0.9" />
+                        <path d="M65 135 C65 100 110 82 110 82 C110 82 155 100 155 135" />
+                        <path d="M32 145 C48 125 65 135 65 135" stroke-width="0.8" />
+                        <path d="M188 145 C172 125 155 135 155 135" stroke-width="0.8" />
+                        <!-- Chandelier & Floral Accents -->
+                        <line x1="110" y1="82" x2="110" y2="128" stroke-width="0.8" />
+                        <path d="M96 136 Q110 146 124 136" />
+                        <circle cx="100" cy="133" r="1.5" fill="currentColor" />
+                        <circle cx="110" cy="136" r="1.5" fill="currentColor" />
+                        <circle cx="120" cy="133" r="1.5" fill="currentColor" />
+                        <!-- Steps -->
+                        <line x1="12" y1="245" x2="208" y2="245" stroke-width="1.5" />
+                        <line x1="25" y1="236" x2="195" y2="236" stroke-width="0.8" />
+                    </svg>
+                </div>
+
+                <p class="text-[10px] sm:text-xs uppercase tracking-[0.24em] text-neutral-600 max-w-md mx-auto leading-relaxed">
+                    We can't wait to celebrate these auspicious evenings with the people who mean the most to us.
+                </p>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             SECTION 3: DARK EDITORIAL INVITATION & FAMILIES
+             ===================================================== -->
+        <section class="py-20 sm:py-28 px-6 bg-[#111111] text-white">
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center reveal-up">
+                <!-- Left Column: Formal Lineage & Invitation -->
+                <div class="md:col-span-6 space-y-6 text-left">
+                    <div>
+                        <p class="font-arabic text-2xl text-white/80 mb-2" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
+                        <h2 class="font-calligraphy text-5xl sm:text-6xl text-white leading-none">The Union</h2>
+                        <p class="text-[10px] uppercase tracking-[0.3em] text-neutral-400 mt-1">
+                            Two Families Coming Together
+                        </p>
+                    </div>
+
+                    <div class="space-y-4 text-xs sm:text-sm text-neutral-300 leading-relaxed font-light border-l border-white/20 pl-4">
+                        <div>
+                            <p class="uppercase tracking-[0.2em] text-[10px] text-white font-semibold mb-1">The Bride</p>
+                            <p class="font-editorial text-xl text-white">Halima</p>
+                            <p class="text-neutral-400">Daughter of Mr. Noor Mohammed Ansari</p>
+                        </div>
+
+                        <div>
+                            <p class="uppercase tracking-[0.2em] text-[10px] text-white font-semibold mb-1">The Groom</p>
+                            <p class="font-editorial text-xl text-white">Mazeen</p>
+                            <p class="text-neutral-400">Son of Mr. Mehmood Usman SahiboIe</p>
+                        </div>
+
+                        <p class="pt-2 text-neutral-300">
+                            Together with their parents, families, relatives &amp; friends, they cordially invite you to grace the auspicious occasions of their <strong class="text-white font-medium">Nikah</strong> and <strong class="text-white font-medium">Walima</strong> celebrations.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Overlapping B&W Polaroids -->
+                <div class="md:col-span-6 flex items-center justify-center relative py-6">
+                    <div class="polaroid-card w-56 sm:w-64 -rotate-3 z-10">
+                        <img
+                            src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80"
+                            onerror="this.src='https://placehold.co/600x750/222222/ffffff?text=Nikah'"
+                            alt="Wedding Moment 1"
+                            class="w-full h-64 sm:h-72 object-cover grayscale-editorial"
+                        />
+                        <p class="font-calligraphy text-xl text-neutral-800 text-center mt-2">Nikah • Nov 27</p>
+                    </div>
+                    <div class="polaroid-card w-48 sm:w-56 rotate-3 -ml-10 mt-16 z-20">
+                        <img
+                            src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80"
+                            onerror="this.src='https://placehold.co/600x750/333333/ffffff?text=Walima'"
+                            alt="Wedding Moment 2"
+                            class="w-full h-52 sm:h-60 object-cover grayscale-editorial"
+                        />
+                        <p class="font-calligraphy text-xl text-neutral-800 text-center mt-2">Walima • Nov 28</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             SECTION 4: DETAILS — NIKAH & WALIMA VENUES + MAPS
+             ===================================================== -->
+        <section id="schedule" class="py-20 sm:py-28 px-5 bg-[#f7f6f4] text-center">
+            <div class="max-w-4xl mx-auto reveal-up">
+                <h2 class="font-calligraphy text-5xl sm:text-6xl text-neutral-900">Details</h2>
+                <p class="text-[10px] sm:text-xs uppercase tracking-[0.32em] text-neutral-500 mt-1 mb-12">
+                    Here Is Our Wedding Schedule
+                </p>
+
+                <!-- Two Side-by-Side Event Cards (Nikah & Walima) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
+
+                    <!-- CARD 1: NIKAH CEREMONY -->
+                    <div class="bg-white p-6 sm:p-8 shadow-sm border border-neutral-200 flex flex-col items-center">
+                        <div class="w-full h-64 overflow-hidden mb-6 bg-neutral-200">
+                            <img
+                                src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80"
+                                onerror="this.src='https://placehold.co/800x600/262626/ffffff?text=Ahmed+Lawn'"
+                                alt="Nikah Venue"
+                                class="w-full h-full object-cover grayscale-editorial hover:scale-105 transition duration-700"
+                            />
+                        </div>
+
+                        <h3 class="font-calligraphy text-4xl text-neutral-900 mb-1">Nikah Ceremony</h3>
+                        <p class="text-[10px] uppercase tracking-[0.22em] text-neutral-500 mb-3">
+                            Hosted by Mr. Noor Mohammed Ansari
+                        </p>
+
+                        <p class="text-xs font-semibold uppercase tracking-wider text-neutral-900">
+                            Friday, November 27, 2026 • 7:00 PM
+                        </p>
+                        <p class="font-editorial italic text-sm text-neutral-600 mb-3">
+                            17 Jumadil Akhir 1448 (Hijri) • After Magrib
+                        </p>
+
+                        <p class="text-xs text-neutral-600 leading-relaxed max-w-xs mb-6">
+                            <strong>Ahmed Lawn</strong><br>
+                            Opp. Dosti Planet North, Near Nayra Petrol Pump, Shibli Nagar, Mumbra, Thane-400612
+                        </p>
+
+                        <a
+                            href="https://www.google.com/maps/place//data=!4m2!3m1!19sChIJyW6aVQC_5zsRwG-l493ErtE"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="mt-auto inline-block bg-neutral-900 hover:bg-neutral-700 text-white text-[10px] uppercase tracking-[0.25em] px-6 py-3 transition"
+                        >
+                            View Map
+                        </a>
+                    </div>
+
+                    <!-- CARD 2: WALIMA RECEPTION -->
+                    <div class="bg-white p-6 sm:p-8 shadow-sm border border-neutral-200 flex flex-col items-center">
+                        <div class="w-full h-64 overflow-hidden mb-6 bg-neutral-200">
+                            <img
+                                src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=900&q=80"
+                                onerror="this.src='https://placehold.co/800x600/262626/ffffff?text=Charminar+Lawns'"
+                                alt="Walima Venue"
+                                class="w-full h-full object-cover grayscale-editorial hover:scale-105 transition duration-700"
+                            />
+                        </div>
+
+                        <h3 class="font-calligraphy text-4xl text-neutral-900 mb-1">Walima Reception</h3>
+                        <p class="text-[10px] uppercase tracking-[0.22em] text-neutral-500 mb-3">
+                            Hosted by Mr. Mehmood Usman SahiboIe
+                        </p>
+
+                        <p class="text-xs font-semibold uppercase tracking-wider text-neutral-900">
+                            Saturday, November 28, 2026 • 7:00 PM
+                        </p>
+                        <p class="font-editorial italic text-sm text-neutral-600 mb-3">
+                            18 Jumadil Akhir 1448 (Hijri) • After Magrib
+                        </p>
+
+                        <p class="text-xs text-neutral-600 leading-relaxed max-w-xs mb-6">
+                            <strong>Charminar Lawns</strong><br>
+                            Near Kasbaah Garden &amp; Restaurant, Mumbra Bypass Road, Sanjay Nagar, Mumbra, Thane-400612
+                        </p>
+
+                        <a
+                            href="https://www.google.com/maps/place//data=!4m2!3m1!19sChIJ9U4uHE2_5zsR25T3IUEoEx0"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="mt-auto inline-block bg-neutral-900 hover:bg-neutral-700 text-white text-[10px] uppercase tracking-[0.25em] px-6 py-3 transition"
+                        >
+                            View Map
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             SECTION 5: EVENING TIMELINE WITH LINE-ART ICONS
+             ===================================================== -->
+        <section class="py-20 sm:py-24 px-5 bg-white text-center border-t border-neutral-200">
+            <div class="max-w-3xl mx-auto reveal-up">
+                <h2 class="font-calligraphy text-5xl sm:text-6xl text-neutral-900">Timeline</h2>
+                <p class="text-[10px] sm:text-xs uppercase tracking-[0.32em] text-neutral-500 mt-1 mb-14">
+                    Evening Order Of Events (Both Days)
+                </p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6">
+                    <!-- Item 1 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 flex items-center justify-center mb-3 text-neutral-800">
+                            <svg class="w-12 h-12" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3">
+                                <path d="M32 10 C22 22 16 32 16 42 H48 C48 32 42 22 32 10 Z" />
+                                <line x1="32" y1="4" x2="32" y2="10" />
+                                <path d="M12 42 H52 V54 H12 Z" />
+                                <path d="M27 54 V46 C27 43 37 43 37 46 V54" />
+                            </svg>
+                        </div>
+                        <p class="text-xs font-semibold tracking-wider text-neutral-900">6:30 PM</p>
+                        <p class="text-[10px] uppercase tracking-[0.18em] text-neutral-500 mt-1">After Magrib<br>Arrival</p>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 flex items-center justify-center mb-3 text-neutral-800">
+                            <svg class="w-12 h-12" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3">
+                                <circle cx="25" cy="34" r="11" />
+                                <circle cx="39" cy="34" r="11" />
+                                <path d="M25 23 L22 17 L28 17 Z" />
+                                <path d="M39 23 L36 17 L42 17 Z" />
+                            </svg>
+                        </div>
+                        <p class="text-xs font-semibold tracking-wider text-neutral-900">7:30 PM</p>
+                        <p class="text-[10px] uppercase tracking-[0.18em] text-neutral-500 mt-1">Nikah / Reception<br>Ceremony</p>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 flex items-center justify-center mb-3 text-neutral-800">
+                            <svg class="w-12 h-12" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3">
+                                <path d="M14 42 C14 30 50 30 50 42 Z" />
+                                <circle cx="32" cy="28" r="2.5" />
+                                <line x1="10" y1="45" x2="54" y2="45" />
+                                <path d="M22 22 Q24 18 22 14" />
+                                <path d="M32 20 Q34 16 32 12" />
+                                <path d="M42 22 Q44 18 42 14" />
+                            </svg>
+                        </div>
+                        <p class="text-xs font-semibold tracking-wider text-neutral-900">8:30 PM</p>
+                        <p class="text-[10px] uppercase tracking-[0.18em] text-neutral-500 mt-1">Royal Dinner<br>Feast</p>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 flex items-center justify-center mb-3 text-neutral-800">
+                            <svg class="w-12 h-12" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3">
+                                <path d="M32 50 C32 50 14 38 14 25 C14 18 20 14 26 14 C29 14 31 16 32 18 C33 16 35 14 38 14 C44 14 50 18 50 25 C50 38 32 50 32 50 Z" />
+                            </svg>
+                        </div>
+                        <p class="text-xs font-semibold tracking-wider text-neutral-900">11:00 PM</p>
+                        <p class="text-[10px] uppercase tracking-[0.18em] text-neutral-500 mt-1">Duas &amp;<br>Rukhsati</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             SECTION 6: ATTIRE & COMPLIMENTS
+             ===================================================== -->
+        <section class="py-16 sm:py-20 px-5 bg-[#f7f6f4] text-center border-t border-neutral-200">
+            <div class="max-w-xl mx-auto reveal-up">
+                <h2 class="font-calligraphy text-5xl text-neutral-900">Dress Code</h2>
+                <p class="text-[10px] uppercase tracking-[0.3em] text-neutral-500 mt-1 mb-6">
+                    Traditional &amp; Formal Attire
+                </p>
+
+                <div class="space-y-3 text-xs uppercase tracking-[0.2em] text-neutral-700 mb-6">
+                    <p><strong class="text-neutral-950">Gentlemen:</strong> Sherwani, Kurta Pyjama or Formal Suit</p>
+                    <p><strong class="text-neutral-950">Ladies:</strong> Lehenga, Sharara, Saree or Evening Gown</p>
+                </div>
+
+                <!-- Monochrome & Gold Palette Dots -->
+                <div class="flex items-center justify-center gap-3 mb-2">
+                    <span class="w-5 h-5 rounded-full bg-neutral-950 border border-neutral-300"></span>
+                    <span class="w-5 h-5 rounded-full bg-neutral-700 border border-neutral-300"></span>
+                    <span class="w-5 h-5 rounded-full bg-amber-700/80 border border-neutral-300"></span>
+                    <span class="w-5 h-5 rounded-full bg-stone-300 border border-neutral-300"></span>
+                    <span class="w-5 h-5 rounded-full bg-white border border-neutral-400"></span>
+                </div>
+                <p class="text-[9px] uppercase tracking-[0.25em] text-neutral-400">Classic Evening Tones</p>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             SECTION 7: FULL-BLEED THANK YOU FOOTER
+             ===================================================== -->
+        <footer class="relative py-24 sm:py-32 px-5 bg-neutral-950 text-white text-center overflow-hidden">
+            <img
+                src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1600&q=80"
+                onerror="this.src='https://placehold.co/1600x900/111111/ffffff?text=Thank+You'"
+                alt="Thank You"
+                class="absolute inset-0 w-full h-full object-cover grayscale-editorial opacity-35"
+            />
+            <div class="absolute inset-0 bg-black/60"></div>
+
+            <div class="relative z-10 max-w-xl mx-auto">
+                <h2 class="font-calligraphy text-6xl sm:text-7xl text-white mb-2">Thank You</h2>
+                <p class="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neutral-300 mb-6">
+                    For Being Part Of Our Story &amp; Prayers
+                </p>
+                <p class="font-editorial italic text-base sm:text-lg text-neutral-200 mb-8">
+                    With Best Compliments From All Family, Relatives &amp; Friends
+                </p>
+
+                <button onclick="copyInviteDetails()" class="inline-flex items-center gap-2 bg-white text-neutral-950 hover:bg-neutral-200 text-[10px] uppercase tracking-[0.25em] font-semibold px-6 py-3 transition">
+                    <i class="fa-regular fa-copy"></i>
+                    <span>Copy Both Venues &amp; Maps</span>
+                </button>
+
+                <p class="text-[10px] uppercase tracking-[0.3em] text-neutral-400 mt-10">
+                    #HalimaAndMazeen • November 2026
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-neutral-900 text-white border border-white/20 px-5 py-2.5 rounded-full text-[11px] uppercase tracking-wider shadow-2xl opacity-0 pointer-events-none transition-opacity duration-300">
+        Copied to clipboard!
+    </div>
+
+    <script>
+        // Reveal Main Editorial Website when Gold Wax Seal is tapped
+        function revealWebsite() {
+            const overlay = document.getElementById('envelope-overlay');
+            overlay.classList.add('opening');
+            setTimeout(() => {
+                overlay.classList.add('revealed');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }, 650);
+        }
+
+        // Bring back the Black-Tie Envelope
+        function resealEnvelope() {
+            const overlay = document.getElementById('envelope-overlay');
+            overlay.classList.remove('revealed');
+            setTimeout(() => {
+                overlay.classList.remove('opening');
+            }, 50);
+        }
+
+        // Scroll Reveal Animation for Editorial Sections
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+        // Share Link via Native Share Sheet
+        async function shareInvite() {
+            const shareData = {
+                title: 'Halima & Mazeen — Nikah & Walima Invitation',
+                text: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم\nYou are cordially invited to the Nikah (Nov 27) & Walima (Nov 28) celebrations of Halima & Mazeen.',
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
+            }
+            copyInviteDetails();
+        }
+
+        // Copy Formatted Nikah & Walima Details + Google Maps Links
+        function copyInviteDetails() {
+            const text =
+                `بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم\n` +
+                `You are cordially invited to the Wedding Celebrations of Halima & Mazeen:\n\n` +
+                `1. NIKAH CEREMONY (Hosted by Mr. Noor Mohammed Ansari)\n` +
+                `Date: Friday, 27 Nov 2026 (17 Jumadil Akhir 1448 Hijri)\n` +
+                `Time: After Magrib, 7:00 PM – 11:00 PM\n` +
+                `Venue: Ahmed Lawn, Opp. Dosti Planet North, Near Nayra Petrol Pump, Shibli Nagar, Mumbra, Thane-400612\n` +
+                `Map: https://www.google.com/maps/place//data=!4m2!3m1!19sChIJyW6aVQC_5zsRwG-l493ErtE\n\n` +
+                `2. WALIMA RECEPTION (Hosted by Mr. Mehmood Usman SahiboIe)\n` +
+                `Date: Saturday, 28 Nov 2026 (18 Jumadil Akhir 1448 Hijri)\n` +
+                `Time: After Magrib, 7:00 PM – 11:00 PM\n` +
+                `Venue: Charminar Lawns, Near Kasbaah Garden & Restaurant, Mumbra Bypass Road, Sanjay Nagar, Mumbra, Thane-400612\n` +
+                `Map: https://www.google.com/maps/place//data=!4m2!3m1!19sChIJ9U4uHE2_5zsR25T3IUEoEx0`;
+
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            const toast = document.getElementById('toast');
+            toast.textContent = 'Nikah & Walima details copied!';
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 2800);
+        }
+    </script>
+</body>
+</html>
